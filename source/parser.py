@@ -28,4 +28,9 @@ if os.path.isfile(args.output_filename):
     if overwrite is False:
         hlp.error()
 
+# Check if all inputs exist
+for input_file in args.input_filelist:
+    if not os.path.isfile(input_file):
+        hlp.error(custom_msg='Input file %s not found!' % (input_file))
+
 # Arguments accepted.

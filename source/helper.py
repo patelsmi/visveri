@@ -27,6 +27,7 @@ def error(ertype='custom', custom_msg='', fatal=True):
         exit()
 
     if fatal:
+        print_new_line()
         exit()
 
 
