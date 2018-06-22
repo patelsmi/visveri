@@ -33,4 +33,6 @@ for input_file in args.input_filelist:
     if not os.path.isfile(input_file):
         hlp.error(custom_msg='Input file %s not found!' % (input_file))
 
-# Arguments accepted.
+# Read all files and populate the database
+
+
