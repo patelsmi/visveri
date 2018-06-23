@@ -12,6 +12,24 @@ def get_file_lines(input_file, line_delimiter):
     return list_of_lines
 
 
+
+class vfile:
+    def __init__(self,db,filepath):
+        self.db = db
+        self.filepath = filepath
+
+    def populate_db():
+        pass
+
+
+
+def rm_white_spaces(line):
+    white_spaces = [' ', '\n', '\t']
+    for each in white_spaces:
+        line = line.replace(each,'')
+    return line
+
+
 class database:
     def __init__(self):
         self.design = {}
