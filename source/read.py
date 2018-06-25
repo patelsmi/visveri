@@ -17,10 +17,73 @@ class vfile:
     def __init__(self,db,filepath):
         self.db = db
         self.filepath = filepath
+        self.comment = False
+        self.line = ''
+
+    def remove_whitespaces():
+        whitepaces = [' ', '/n', '/t']
+        for whitespace in whitespaces:
+            self.line = self.line.replace(whitespace,'')
+
+    def end_comment_block():
+        if '*/' in self.line:
+            self.comment = False
+            return True
+        else:
+            return False
+
+    def is_comment():
+        if '//' in self.line:
+            return True
+        elsif '/*' in self.line:
+            self.comment = True
+            return True
+        else:
+            return False
+
+    def is_input():
+        if 'input' in self.line:
+            return True
+        else:
+            return False
+
+    def is_output():
+        if 'output' in self.line:
+            return True
+        else:
+            return False
+
+    def is_instance():
+        return False
+
+    def get_intput_name():
+        
+
+    def process_line():
+        self.remove_whitespaces()
+        if self.is_input():
+            return get_input_name()
+        elsif self.is_output():
+            return get_output_name()
+        else self.is_instance():
+            return get_instance_name()
+
+    def add_line_to_db(line):
+        if self.comment:
+            if end_comment_block(line):
+                return False
+        else:
+            if is_comment(line):
+                return False
+            else:
+                process_line(line)
+                return True
 
     def populate_db():
-        pass
-
+        lines = get_file_lines(self.filepath)
+        for line in lines:
+            self.line = line
+            add_line_to_db(line)
 
 
 def rm_white_spaces(line):
