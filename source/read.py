@@ -1,4 +1,5 @@
 import helper as hlp
+import re
 
 
 def get_file_lines(input_file, line_delimiter):
@@ -12,85 +13,99 @@ def get_file_lines(input_file, line_delimiter):
     return list_of_lines
 
 
+class vline:
+    def __init__(self, line, comment):
+        self.line = line
+        self.comment = comment
+
+    def remove_whitspaces(self,custom=None):
+        if curtom is None:
+            return re.sub('\s+', ' ', self.line).strip()
+        else:
+            return re.sub('\s+', ' ', custom).strip()
+
+    def remove_comment(self):
+        if self.comment:
+            if '*/' in self.line:
+                self.line = self.line.split('*/')[1]
+                self.comment = False
+            else:
+                self.line = ''
+                self.comment = True
+        else:
+            if '//' in string:
+                self.line = self.line.split('//')[0]
+                self.comment = False
+            elsif '/*' in string:
+                non_comment = self.line.split('/*')[0]
+                self.comment = True
+                if '*/' in self.line.split('/*')[1]:
+                    non_comment += self.line.split('/*')[1].split('*/')[1]
+                    self.comment = False
+                self.line = non_comment
+
+    def print_line(self):
+        print self.line
+
+    def print_comment_status(self):
+        print self.comment
+
+    def is_input(self):
+        if any('input ', 'input[') in self.line:
+            return True
+        else:
+            return False
+
+    def is_output(self):
+        if any('output ', 'output[') in self.line:
+            return True
+        else:
+            return False
+
+    def is_submodule(self):
+        if '(' in self.line:
+            module_instance = self.line.split('(')[0]
+            if ' ' in module_instance:
+                module_instance = module_instance.split(' ')
+                if len(module_instance) is 2:
+                    return True
+
+    def get_inputname(self):
+        input_name = self.line.split('input')
+        if ']' in input_name:
+            input_name = input_name.split(']')[1]
+        return self.remove_whitespaces(input_name)
+
+    def get_outputname(self):
+        output_name = self.line.split('output')
+        if ']' in output_name:
+            output_name = output_name.split(']')[1]
+        return self.remove_whitespaces(output_name)
+
+    def get_submodule(self):
+        instance = self.line.split('(')[0].split(' ')[1]
+        module = self.line.split('(')[0].split(' ')[0]
+        return {instance:module}
+
 
 class vfile:
     def __init__(self,db,filepath):
         self.db = db
         self.filepath = filepath
         self.comment = False
-        self.line = ''
 
-    def remove_whitespaces():
-        whitepaces = [' ', '/n', '/t']
-        for whitespace in whitespaces:
-            self.line = self.line.replace(whitespace,'')
-
-    def end_comment_block():
-        if '*/' in self.line:
-            self.comment = False
-            return True
-        else:
-            return False
-
-    def is_comment():
-        if '//' in self.line:
-            return True
-        elsif '/*' in self.line:
-            self.comment = True
-            return True
-        else:
-            return False
-
-    def is_input():
-        if 'input' in self.line:
-            return True
-        else:
-            return False
-
-    def is_output():
-        if 'output' in self.line:
-            return True
-        else:
-            return False
-
-    def is_instance():
-        return False
-
-    def get_intput_name():
-        
-
-    def process_line():
-        self.remove_whitespaces()
-        if self.is_input():
-            return get_input_name()
-        elsif self.is_output():
-            return get_output_name()
-        else self.is_instance():
-            return get_instance_name()
-
-    def add_line_to_db(line):
-        if self.comment:
-            if end_comment_block(line):
-                return False
-        else:
-            if is_comment(line):
-                return False
-            else:
-                process_line(line)
-                return True
-
-    def populate_db():
+    def process_file(self):
         lines = get_file_lines(self.filepath)
-        for line in lines:
-            self.line = line
-            add_line_to_db(line)
-
-
-def rm_white_spaces(line):
-    white_spaces = [' ', '\n', '\t']
-    for each in white_spaces:
-        line = line.replace(each,'')
-    return line
+        for each in lines:
+            line = vline(each,self.comment)
+            line.remove_whitespaces()
+            line.remove_comment()
+            if line.is_input()
+                name = line.get_inputname()
+            elsif line.is_output():
+                name = line.get_outputname()
+            elsif line.is_submodule():
+                entry = line.get_submodule()
 
 
 class database:
