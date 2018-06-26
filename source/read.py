@@ -36,7 +36,7 @@ class vline:
             if '//' in string:
                 self.line = self.line.split('//')[0]
                 self.comment = False
-            elsif '/*' in string:
+            elif '/*' in string:
                 non_comment = self.line.split('/*')[0]
                 self.comment = True
                 if '*/' in self.line.split('/*')[1]:
@@ -102,9 +102,9 @@ class vfile:
             line.remove_comment()
             if line.is_input()
                 name = line.get_inputname()
-            elsif line.is_output():
+            elif line.is_output():
                 name = line.get_outputname()
-            elsif line.is_submodule():
+            elif line.is_submodule():
                 entry = line.get_submodule()
 
 
