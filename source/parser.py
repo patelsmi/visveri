@@ -4,7 +4,7 @@
 import argparse
 import helper as hlp
 import os.path
-
+import read as rd
 
 # Parser
 parser = argparse.ArgumentParser(description='Generate visio based block diagram from the Verilog / SystemVerilog code')
@@ -34,5 +34,14 @@ for input_file in args.input_filelist:
         hlp.error(custom_msg='Input file %s not found!' % (input_file))
 
 # Read all files and populate the database
+db = rd.database()
 
-
+for input_file in args.input_filelist:
+    parseFile = rd.vfile(input_file)
+    parseFile.process_file()
+    module = parseFile.modulename
+    print module
+    print parseFile.input
+    print parseFile.output
+    print parseFile.submodules
+    db.add_module(module)
