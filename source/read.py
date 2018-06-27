@@ -2,21 +2,9 @@ import helper as hlp
 import re
 
 
-def get_file_lines(input_file, line_delimiter):
-    list_of_lines = []
-    with open(input_file) as f:
-        input_text = f.read()
-    if lines_delimiter in input_text:
-        list_of_lines = input_text.split(lines_delimiter)
-    else:
-        list_of_lines = [input_text]
-    return list_of_lines
-
-
 class vline:
     def __init__(self, line, comment):
         self.line = line
-        self.comment = comment
 
     def remove_whitspaces(self,custom=None):
         if curtom is None:
@@ -24,31 +12,8 @@ class vline:
         else:
             return re.sub('\s+', ' ', custom).strip()
 
-    def remove_comment(self):
-        if self.comment:
-            if '*/' in self.line:
-                self.line = self.line.split('*/')[1]
-                self.comment = False
-            else:
-                self.line = ''
-                self.comment = True
-        else:
-            if '//' in string:
-                self.line = self.line.split('//')[0]
-                self.comment = False
-            elif '/*' in string:
-                non_comment = self.line.split('/*')[0]
-                self.comment = True
-                if '*/' in self.line.split('/*')[1]:
-                    non_comment += self.line.split('/*')[1].split('*/')[1]
-                    self.comment = False
-                self.line = non_comment
-
     def print_line(self):
         print self.line
-
-    def print_comment_status(self):
-        print self.comment
 
     def is_input(self):
         if any('input ', 'input[') in self.line:
@@ -85,27 +50,38 @@ class vline:
     def get_submodule(self):
         instance = self.line.split('(')[0].split(' ')[1]
         module = self.line.split('(')[0].split(' ')[0]
-        return {instance:module}
+        return {'instance':instance, 'module':module}
 
 
 class vfile:
-    def __init__(self,db,filepath):
-        self.db = db
-        self.filepath = filepath
-        self.comment = False
+    def __init__(self, filepath):
+        self.filetext = hlp.get_text(filepath)
+        self.input = []
+        self.output = []
+        self.submodules = {}
+
+    def remove_comments(self):
+        self.filetext = hlp.remove_delimited_ss(self.filetext, start='//', end='\n')
+        self.filetext = hlp.remove_delimited_ss(self.filetext, start='/*', end='*/')
+
+    def get_lines(self):
+        if (';') in self.filetext:
+            return self.filetext.split(';')
+        else:
+            return [self.filetext]
 
     def process_file(self):
-        lines = get_file_lines(self.filepath)
+        self.remove_comments()
+        lines = self.get_lines()
         for each in lines:
-            line = vline(each,self.comment)
+            line = vline(each)
             line.remove_whitespaces()
-            line.remove_comment()
             if line.is_input()
-                name = line.get_inputname()
+                self.input.append(line.get_inputname())
             elif line.is_output():
-                name = line.get_outputname()
+                self.output.append(name = line.get_outputname())
             elif line.is_submodule():
-                entry = line.get_submodule()
+                self.submodules[line.get_submodule()['instance']] = line.get_submodule()['module']
 
 
 class database:
@@ -188,5 +164,4 @@ class database:
         for instance in submodules.keys():
             print " %s   --->   %s " %(instance, submodules[instance])
         hlp.print_new_line()
-
 
