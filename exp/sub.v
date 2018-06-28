@@ -1,4 +1,4 @@
-module(
+module sub(
     input  [2:0] sub_inp1,
     input  [2:0] sub_inp2,
     output [2:0] sub_out

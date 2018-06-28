@@ -40,7 +40,8 @@ class vline:
             if ' ' in module_instance:
                 module_instance = module_instance.split(' ')
                 if len(module_instance) is 2:
-                    return True
+                    if 'module' not in module_instance[0]:
+                        return True
 
     def is_module(self):
         if 'module ' in self.line:
@@ -75,8 +76,8 @@ class vline:
 class vfile:
     def __init__(self, filepath):
         self.filetext = hlp.get_text(filepath)
-        self.input = []
-        self.output = []
+        self.inputs = []
+        self.outputs = []
         self.submodules = {}
         self.modulename = None
 
@@ -97,29 +98,27 @@ class vfile:
                 lines.append(each)
         return lines
 
-        return self.remove_whitespaces(self.filetext.split('module ')[1].split('(')[0])
-
     def process_file(self):
         self.remove_comments()
         lines = self.get_lines()
         for each in lines:
             line = vline(each)
             line.strip_whitespaces()
+            if line.is_module():
+                self.modulename = line.get_modulename()
             if line.is_input():
-                self.input.append(line.get_inputname())
+                self.inputs.append(line.get_inputname())
             elif line.is_output():
-                self.output.append(line.get_outputname())
+                self.outputs.append(line.get_outputname())
             elif line.is_submodule():
                 self.submodules[line.get_submodule()['instance']] = line.get_submodule()['module']
-            elif line.is_module():
-                self.modulename = line.get_modulename()
 
     def print_inputs(self):
-        for input_ in self.input:
+        for input_ in self.inputs:
             print input_
 
     def print_outputs(self):
-        for output_ in self.output:
+        for output_ in self.outputs:
             print output_
 
     def print_submodules(self):
@@ -156,8 +155,8 @@ class database:
             module = self.last_module
         # Not checking for duplicate instance - for performance
         self.design[module]['submodules'][instance] = submodule
-        self.last_module = submodule
-        self.add_module(submodule)
+        #self.last_module = submodule
+        #self.add_module(submodule)
 
     def get_inputs(self, module=None):
         if module is None:

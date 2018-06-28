@@ -1,4 +1,4 @@
-module(
+module wrapper(
 );
 
 reg [2:0] inp1;

@@ -40,8 +40,15 @@ for input_file in args.input_filelist:
     parseFile = rd.vfile(input_file)
     parseFile.process_file()
     module = parseFile.modulename
-    print module
-    print parseFile.input
-    print parseFile.output
-    print parseFile.submodules
     db.add_module(module)
+    for each_input in parseFile.inputs:
+        db.add_input(each_input)
+    for each_output in parseFile.outputs:
+        db.add_output(each_output)
+    for instance in parseFile.submodules:
+        submodule = parseFile.submodules[instance]
+        db.add_submodule(submodule,instance)
+
+
+
+print db.design
