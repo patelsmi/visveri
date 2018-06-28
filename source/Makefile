@@ -13,6 +13,8 @@ parser:
 	python parser.py -o $(OUTPUT) -top $(TOP) -i $(INPUT)
 
 
+clean:
+	rm *.pyc
 
 
 
