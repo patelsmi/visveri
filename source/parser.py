@@ -5,6 +5,8 @@ import argparse
 import helper as hlp
 import os.path
 import read as rd
+import yaml
+
 
 # Parser
 parser = argparse.ArgumentParser(description='Generate visio based block diagram from the Verilog / SystemVerilog code')
@@ -49,6 +51,6 @@ for input_file in args.input_filelist:
         submodule = parseFile.submodules[instance]
         db.add_submodule(submodule,instance)
 
+with open("design_db.yaml", 'w') as f:
+    yaml.dump(db.design, f, default_flow_style=False)
 
-
-print db.design

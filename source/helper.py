@@ -1,5 +1,4 @@
 import sys
-import re
 
 def print_new_line():
     print ''

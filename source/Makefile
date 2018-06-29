@@ -14,7 +14,7 @@ parser:
 
 
 clean:
-	rm *.pyc
+	rm *.pyc *.yaml *.yml
 
 
 
