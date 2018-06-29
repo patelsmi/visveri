@@ -1,5 +1,5 @@
 import sys
-
+import re
 
 def print_new_line():
     print ''
@@ -50,18 +50,19 @@ def get_bool_input(msg=''):
 def get_list_from_str(string, delim):
     return string.split(delim)
 
-
 def remove_delimited_ss(string, start, end):
-    split_string = string.split(start)
-    delimited_string = split_string[0]
-    if len(split_string) > 1:
-        for segment in split_string[1:]:
-            if '\n' in segment:
-                delimited_string += ' ' + re.split(end, segment, maxsplit=1)[1]
-    return delimited_string
-
+    segments = string.split(start)
+    if len(segments) is 1:
+        delim_ss = segments[0]
+    else:
+        delim_ss = segments[0]
+        for segment in segments[1:]:
+            if end in segment:
+                delim_ss += ' ' + segment.split(end, 1)[1]
+    return delim_ss
 
 def get_text(filepath):
     with open(filepath) as f:
         text = f.read()
     return text
+
