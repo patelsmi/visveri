@@ -5,6 +5,7 @@ import argparse
 import helper as hlp
 import os.path
 import read as rd
+import database as db
 import yaml
 
 
@@ -36,21 +37,22 @@ for input_file in args.input_filelist:
         hlp.error(custom_msg='Input file %s not found!' % (input_file))
 
 # Read all files and populate the database
-db = rd.database()
+mydb = db.database()
 
 for input_file in args.input_filelist:
     parseFile = rd.vfile(input_file)
     parseFile.process_file()
     module = parseFile.modulename
-    db.add_module(module)
+    mydb.add_module(module)
     for each_input in parseFile.inputs:
-        db.add_input(each_input)
+        mydb.add_input(each_input)
     for each_output in parseFile.outputs:
-        db.add_output(each_output)
+        mydb.add_output(each_output)
     for instance in parseFile.submodules:
         submodule = parseFile.submodules[instance]
-        db.add_submodule(submodule,instance)
+        mydb.add_submodule(submodule,instance)
 
 with open("design_db.yaml", 'w') as f:
-    yaml.dump(db.design, f, default_flow_style=False)
+    yaml.dump(mydb.design, f, default_flow_style=False)
 
+print mydb.design
